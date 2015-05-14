@@ -18,9 +18,10 @@ public class Player {
     String name;
     String position;
     String team;
-    int gp, goals, assists, points, plusminus, pim, sog, hits, blocks, 
-        fow, fol, ppp, ppg, ppa, shg, sha, gwg;
+    int gp, goals, assists, points, plusminus, pim, sog, hits, blocks,
+        fow, fol, stp, ppg, ppa, shg, sha, gwg;
     float sht_pcnt;
+    String toi;
 
     
     //int TOI; library
@@ -39,9 +40,10 @@ public class Player {
             + " | PIM: " + pim 
             + " | Hits: " + hits 
             + " | Blocks: " + blocks 
-            + " | PPP: " + ppp      
+            + " | STP: " + stp      
             + " | SOG: " + sog 
-            + " | S%: " + sht_pcnt      
+            + " | S%: " + sht_pcnt   
+            + " | TOI: " + toi 
             + " |"
         );
     }
@@ -49,18 +51,38 @@ public class Player {
     public void printStats (){
         System.out.println(
             "               " 
-            + "| " + position 
+            + " | " + position 
             + " #" + jersey 
             + " | " + team 
             + " | GP: " + gp
-            + " | PTS: " + points 
             + " | G: " + goals 
             + " | A: " + assists 
-            + " | SOG: " + sog 
+            + " | PTS: " + points 
             + " | +/-: " + plusminus 
-            + " | PIM: " + pim + " |"
+            + " | PIM: " + pim 
+            + " | Hits: " + hits 
+            + " | Blocks: " + blocks 
+            + " | STP: " + stp      
+            + " | SOG: " + sog 
+            + " | S%: " + sht_pcnt   
+            + " | TOI: " + toi 
+            + " |"
         );
     }
+    
+    public boolean matches(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Player other = (Player) obj;
+        if (!name.contains(other.name.substring(3)) || this.goals != other.goals || this.sog != this.sog)
+            return false;
+        return true;
+    }
+    
     
 //    public int getHashCode (String name_in) {
 //        int hash = 1;

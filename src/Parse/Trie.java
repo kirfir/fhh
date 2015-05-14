@@ -11,7 +11,9 @@ package Parse;
  * @author trevor.witjes
  */
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Trie {
    private TrieNode root;
@@ -39,33 +41,45 @@ public class Trie {
     */
    public List getWords(String prefix) {
         //Find the node which represents the last letter of the prefix
+        List temp = new ArrayList();
+        temp.addAll(getWordsRecursive(prefix, root));
         TrieNode lastNode = root;
         for (int i=0; i<prefix.length(); i++) {
             lastNode = lastNode.getNode(prefix.charAt(i));
       
             //If no node matches, then no words exist, return empty list
-            if (lastNode == null) return new ArrayList();      
+            if (lastNode == null) i = 500;   
         }
       
-        //Return the words which eminate from the last node
-        return lastNode.getWords();
+        if (lastNode != null) temp.addAll(lastNode.getWords());   //Return the words which eminate from the last node
+        
+        Set<String> hs = new HashSet<>();   // remove duplicates
+        hs.addAll(temp);
+        temp.clear();
+        temp.addAll(hs);
+        return temp;
    }
    
    private List getWordsRecursive (String prefix, TrieNode prevNode){
         
-        TrieNode lastNode = new TrieNode();
+        List temp = new ArrayList();
+        TrieNode lastNode;
         
         for (int j=0; j<30; j++){
-            lastNode = prevNode.getNodefromIndex(j);
-            for (int i=0; i<prefix.length(); i++) {
-                lastNode = lastNode.getNode(prefix.charAt(i));
-      
-                if (lastNode == null) return new ArrayList();      
+            lastNode = prevNode.getNodefromIndex(j);                                // get nodes A-Z under prevNode
+            if (lastNode != null){  // this doesn't work. only works if letter exists at that point 
+                temp.addAll(getWordsRecursive(prefix, lastNode));                             // call getWordsRecursive for each A-Z
+                for (int i=0; i<prefix.length(); i++) {                                 // go down the list, matching prefix
+                    lastNode = lastNode.getNode(prefix.charAt(i));
+                    if (lastNode == null) i = 500;          
+                }
+                if (lastNode != null){
+                    temp.addAll(lastNode.getWords());
+                }
             }
         }
 
-        //Return the words which eminate from the last node
-        return lastNode.getWords();
+        return temp;
    }
    
 }

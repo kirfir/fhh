@@ -7,7 +7,6 @@
 package fh;
 
 import Data.League;
-import Web.Site;
 import java.io.IOException;
 
 /**
@@ -19,7 +18,7 @@ public class FH {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         
 //        Site neulion = new Site("https://ca.sports.yahoo.com/nhl/teams/ott/roster/");
 //        neulion.connect();

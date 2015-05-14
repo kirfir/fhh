@@ -18,12 +18,28 @@ import java.util.Map;
  * @author trevor.witjes
  */
 public class Team {
+    private String name;
+    private List<Player> members = new ArrayList<Player>();
+    
     private String timestamp;
     private GsonData [] skaterData;
     
     public void print_skaterData(){
         //System.out.println(Arrays.toString(skaterData));
         System.out.println(skaterData[2]);
+        
+    }
+    
+    public void fillTeam(String input){      
+        name = input.substring(input.indexOf("\">") + 2, input.indexOf("</a>"));
+        System.out.println(name);
+        
+        String [] temp = input.split("stopBubble(event)");
+
+        for (int i=0; i<temp.length; i++){
+            Player p = new Player();
+            
+        }
         
     }
     
@@ -45,18 +61,28 @@ public class Team {
             p.team = team;
             p.position = stats[1];
             p.name = stats[2].substring(1);
-            p.gp = Integer.parseInt(stats[3]);
+//            p.gp = Integer.parseInt(stats[3]);
             p.goals = Integer.parseInt(stats[4]);
-            p.assists = Integer.parseInt(stats[5]);
-            p.points = Integer.parseInt(stats[6]);
-            p.plusminus = Integer.parseInt(stats[7]);
-            p.pim = Integer.parseInt(stats[8]);
+//            p.assists = Integer.parseInt(stats[5]);
+//            p.points = Integer.parseInt(stats[6]);
+//            p.plusminus = Integer.parseInt(stats[7]);
+//            p.pim = Integer.parseInt(stats[8]);
             p.sog = Integer.parseInt(stats[9]);  
+            p.toi = stats[10];
             
-            // Add player to lookup
-            if (lookup.getWords(p.name.substring(3).toLowerCase()).isEmpty()){
-                lookup.addWord(p.name.substring(3).toLowerCase());
-            } 
+            List temp = new ArrayList<String>();
+            temp = lookup.getWords(p.name.substring(3).toLowerCase());
+                    
+            for (int j=0; j<temp.size(); j++){
+                for (int k=0; k<players.get((String) temp.get(j)).size(); k++){
+                    if (players.get((String) temp.get(j)).get(k).matches(p)){
+                        players.get((String) temp.get(j)).get(k).jersey = p.jersey;
+                        players.get((String) temp.get(j)).get(k).position = p.position;
+                        players.get((String) temp.get(j)).get(k).toi = p.toi;
+                    }
+                }
+            }
+
             
             // Add player to hashmap
             String key = p.name.substring(3).toLowerCase();
@@ -97,21 +123,21 @@ public class Team {
             p.fol = Integer.parseInt(stats[10].substring((stats[10].indexOf(">")+1), stats[10].indexOf("<")));
             p.ppg = Integer.parseInt(stats[11].substring((stats[11].indexOf(">")+1), stats[11].indexOf("<")));
             p.ppa = Integer.parseInt(stats[12].substring((stats[12].indexOf(">")+1), stats[12].indexOf("<")));
-            p.ppp = p.ppg + p.ppa;
             p.shg = Integer.parseInt(stats[13].substring((stats[13].indexOf(">")+1), stats[13].indexOf("<")));
             p.sha = Integer.parseInt(stats[14].substring((stats[14].indexOf(">")+1), stats[14].indexOf("<")));
+            p.stp = p.ppg + p.ppa + p.shg + p.sha;
             p.gwg = Integer.parseInt(stats[15].substring((stats[15].indexOf(">")+1), stats[15].indexOf("<")));
             p.sog = Integer.parseInt(stats[16].substring((stats[16].indexOf(">")+1), stats[16].indexOf("<")));
             p.sht_pcnt = round(Float.parseFloat(stats[17].substring((stats[17].indexOf(">")+1), stats[17].indexOf("<")))*100, 2);
-            p.printPlayer();
+            // p.printPlayer();
             
             // Add player to lookup
-            if (lookup.getWords(p.name.toLowerCase().replace(" ", "")).isEmpty()){
-                lookup.addWord(p.name.toLowerCase().replace(" ", ""));
+            if (lookup.getWords(p.name.toLowerCase()).isEmpty()){
+                lookup.addWord(p.name.toLowerCase());
             } 
             
             // Add player to hashmap
-            String key = p.name.toLowerCase().replace(" ", "");
+            String key = p.name.toLowerCase(); //.replace(" ", "")
             List l = new ArrayList();
             if (players.get(key) != null){ // if player name exists, add to list
                 players.get(key).add(p);
