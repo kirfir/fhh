@@ -6,7 +6,8 @@
 
 package Data;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -20,9 +21,8 @@ public class Player {
     String team;
     int gp, goals, assists, points, plusminus, pim, sog, hits, blocks,
         fow, fol, stp, ppg, ppa, shg, sha, gwg;
-    float sht_pcnt;
-    String toi;
-
+    float sht_pcnt, toi;
+    List<Split> splits = new ArrayList<>();
     
     //int TOI; library
     
@@ -48,26 +48,41 @@ public class Player {
         );
     }
     
-    public void printStats (){
-        System.out.println(
-            "               " 
-            + " | " + position 
-            + " #" + jersey 
-            + " | " + team 
-            + " | GP: " + gp
-            + " | G: " + goals 
-            + " | A: " + assists 
-            + " | PTS: " + points 
-            + " | +/-: " + plusminus 
-            + " | PIM: " + pim 
-            + " | Hits: " + hits 
-            + " | Blocks: " + blocks 
-            + " | STP: " + stp      
-            + " | SOG: " + sog 
-            + " | S%: " + sht_pcnt   
-            + " | TOI: " + toi 
-            + " |"
-        );
+    public void addSplit(Split s){
+        // add split to List<Split>
+        if (splits.isEmpty()){ // if this is first split, add split for existing stats
+            Split n = new Split(team, this);
+            splits.add(n);
+        }
+        
+        splits.add(s);
+        
+        // add to stat totals
+        gp += s.gp;
+        goals += s.goals;
+        assists += s.assists;
+        points += s.points;
+        plusminus += s.plusminus;
+        pim += s.pim;
+        sog += s.sog;
+        hits += s.hits;
+        blocks += s.blocks;
+        fow += s.fow;
+        fol += s.fol;
+        stp += s.stp;
+        ppg += s.ppg;
+        ppa += s.ppa;
+        shg += s.shg;
+        sha += s.sha;
+        gwg += s.gwg;
+        sht_pcnt = (sht_pcnt + s.sht_pcnt)/2;
+        toi = (toi + s.toi)/2;
+    }
+    
+    public void printSplits (){
+        for (Split split : splits) {
+            split.printSplit();
+        }
     }
     
     public boolean matches(Object obj) {

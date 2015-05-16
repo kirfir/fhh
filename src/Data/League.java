@@ -40,8 +40,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
  */
 public class League {
     
-    Map <String, List<Player>> players = new HashMap ();
-    List<Team> fh_teams = new ArrayList<Team>();
+    Map <String, Player> players = new HashMap ();
+    List<Team> fh_teams = new ArrayList<>();
     Trie lookup = new Trie();
     String [] teams = new String [] {"ANA", "ARI", "BOS", "BUF", "CGY", "CAR",
                                     "CHI", "COL", "CBJ", "DAL", "DET", "EDM",
@@ -55,12 +55,8 @@ public class League {
         populate();
     }
     
-    // var=1:   gson files
-    // var=2:   yahoo html
     public final void populate () throws IOException, InterruptedException {   
-//        addYahooData("https://ca.sports.yahoo.com/nhl/teams/ott/stats/", "OTT");
-//        addGsonData("http://nhlwc.cdnak.neulion.com/fs1/nhl/league/playerstatsline/20142015/2/OTT/iphone/playerstatsline.json", "OTT");
-        
+
         //addTeams();
         String alt;
         for (String team : teams) {
@@ -89,9 +85,9 @@ public class League {
 
         try(Reader reader = new StringReader(input)){
             Gson gson = new GsonBuilder().create();
-            Team t = gson.fromJson(reader, Team.class);
-            t.addGson(players, lookup, team);
-            split = t.toString().split("\\(");             
+            Add add = gson.fromJson(reader, Add.class);
+            add.Gson(players, lookup, team);
+            split = add.toString().split("\\(");             
         }
         timestamp = split[0]; // Store timestamp for verification purposes
     }
@@ -103,8 +99,8 @@ public class League {
         
         String temp = input.substring(input.indexOf("<colgroup><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col></colgroup>"));
         temp = temp.substring(temp.indexOf("<tbody>"), temp.indexOf("</tbody>"));
-        Team t = new Team();
-        t.addYahoo(temp, players, lookup, team);
+        Add add = new Add();
+        add.Yahoo(temp, players, lookup, team);
     }
     
     public void addTeams() throws InterruptedException, FileNotFoundException {
@@ -154,34 +150,19 @@ public class League {
         Scanner reader = new Scanner(System.in);
         boolean quit = false;
         
-        //System.out.println(Arrays.toString(players.entrySet().toArray()));
-        
         while (!quit){
             System.out.println("Enter player: ");
 
             String req = reader.nextLine();
             if (req.toLowerCase().equals("quit")) {
                 quit = true;
-            } else {          
+            } else {       
+                int i;
                 List poss = lookup.getWords(req.toLowerCase());
-                String srch;  
-                int i, j;
-                boolean samePlayer;
-
                 for (i=0; i<poss.size(); i++){
-                    srch = poss.get(i).toString();
-                    for (j=0; j<players.get(srch).size(); j++){
-                        samePlayer = false;
-                        if (j > 0){
-                            samePlayer = players.get(srch).get(j).name.equals(players.get(srch).get(j-1).name)
-                                    && (players.get(srch).get(j).gp + players.get(srch).get(j-1).gp <= 82);
-                        }
-                        // if samePlayer, print name only once
-                        if (samePlayer) { players.get(srch).get(j).printStats();}
-                            else { players.get(srch).get(j).printPlayer();}
-                    }
+                    players.get(poss.get(i).toString()).printPlayer();
                 }
-
+                
                 if (i==0) System.out.println("No player by that name found!");
             }
         }

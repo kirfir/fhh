@@ -24,4 +24,10 @@ public class StringCmds {
         return bd.floatValue();
     }
     
+    public static float timeToFloat (String time) {
+        String temp [] = time.split(":");
+        float f = Float.parseFloat(temp[0]) + Float.parseFloat(temp[1])/100;        
+        return f;
+    }
+    
 }
