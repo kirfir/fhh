@@ -14,6 +14,7 @@ import com.google.gson.GsonBuilder;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -27,6 +28,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -57,7 +65,6 @@ public class League {
     
     public final void populate () throws IOException, InterruptedException {   
 
-        //addTeams();
         String alt;
         for (String team : teams) {
             switch (team) {
@@ -75,6 +82,9 @@ public class League {
         for (String team : teams) {
             addGsonData("http://nhlwc.cdnak.neulion.com/fs1/nhl/league/playerstatsline/20142015/2/" + team + "/iphone/playerstatsline.json", team);
         }
+        
+        addTeams();
+        dumpExcel();
     }
     
     public void addGsonData(String site, String team) throws IOException {
@@ -131,7 +141,7 @@ public class League {
         //System.out.println(temp[1]);
         
         Team t = new Team();
-        t.fillTeam(temp[1]);
+        t.fillTeam(players, lookup, temp[1]);
         fh_teams.add(t);
         
 //        for (int i=1; i<temp.length; i++){
@@ -145,6 +155,39 @@ public class League {
         //System.out.println(input);   
     }
          
+    public void dumpExcel () throws FileNotFoundException, IOException {
+                //Workbook wb = new HSSFWorkbook();
+        Workbook wb = new XSSFWorkbook();
+        CreationHelper createHelper = wb.getCreationHelper();
+        Sheet sheet = wb.createSheet("leaguedata");
+
+        // set headers on excel sheet
+        Row row = sheet.createRow((short)0);
+        String headers [] = new String [] {
+            "Team", "Player", "Position", "GP", "G", "A", "PTS", "+/-", "STP", "SOG",
+            "Hits", "Blocks", "TOI", "G/60", "A/60", "PTS/60", "STP/60",
+            "SOG/60", "Hits/60", "Blocks/60"
+        };
+
+        for (int i=0; i<headers.length; i++){
+            Cell cell = row.createCell(i);
+            cell.setCellValue(createHelper.createRichTextString(headers[i]));
+            CellStyle cellStyle = wb.createCellStyle();
+            cellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+            cell.setCellStyle(cellStyle);
+        }
+
+        // add player data
+        int track = 2;
+        for (int i=0; i<fh_teams.size(); i++){
+            track = fh_teams.get(i).dumpExcel(sheet, track);
+        }
+        
+        // Write the output to a file
+        FileOutputStream fileOut = new FileOutputStream("RFHL.xlsx");
+        wb.write(fileOut);
+        fileOut.close();
+    }
     
     public void listen () throws IOException { 
         Scanner reader = new Scanner(System.in);

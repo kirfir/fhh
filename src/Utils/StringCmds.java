@@ -26,8 +26,16 @@ public class StringCmds {
     
     public static float timeToFloat (String time) {
         String temp [] = time.split(":");
-        float f = Float.parseFloat(temp[0]) + Float.parseFloat(temp[1])/100;        
+        float f = Float.parseFloat(temp[0]) + Float.parseFloat(temp[1])/60;        
         return f;
+    }
+    
+    public static String timeToString (float time) {       
+        int min = (int) time;
+        float sec = (time - min) * 60;
+        
+        String s = min + ":" + String.format("%02d", (int) sec);    
+        return s;
     }
     
 }

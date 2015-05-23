@@ -51,15 +51,22 @@ public class Add {
             List <String> temp = lookup.getWords(p.name.substring(3).toLowerCase());
                     
             for (int j=0; j<temp.size(); j++){
-                if (!players.get(temp.get(j)).splits.isEmpty()) {  
-                    String test = temp.get(j);
-                    System.out.println(test);
-                    for (int k=0; k<players.get(test).splits.size(); k++){
-                        if (players.get(test).splits.get(k).matches(p)){
-                            players.get(test).jersey = p.jersey;
-                            players.get(test).position = p.position;
-                            players.get(test).splits.get(k).toi = p.toi;
+                String key = temp.get(j);
+                if (!players.get(key).splits.isEmpty()) {   
+                    for (int k=0; k<players.get(key).splits.size(); k++){
+                        if (players.get(key).splits.get(k).matches(p)){
+                            players.get(key).jersey = p.jersey;
+                            players.get(key).position = p.position;
+                            players.get(key).splits.get(k).toi = p.toi;
+                            players.get(key).addTOI(players.get(key).splits.get(k));
                         }
+                    }
+                } else {
+                    if (players.get(key).matches(p)){
+                        players.get(key).jersey = p.jersey;
+                        players.get(key).position = p.position;
+                        players.get(key).toi = p.toi;
+                        players.get(key).add_advStats();
                     }
                 }
             }
