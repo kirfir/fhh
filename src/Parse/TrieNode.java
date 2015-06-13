@@ -10,10 +10,11 @@ package Parse;
  *
  * @author trevor.witjes
  */
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrieNode {
+public class TrieNode implements Serializable{
     private TrieNode parent;
     private TrieNode[] children;
     private boolean isLeaf;     //Quick way to check if any children exist

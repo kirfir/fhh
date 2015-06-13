@@ -55,12 +55,27 @@ public class Site {
         InputStream is = con.getInputStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         
-        String output = "";
+        StringBuilder builder = new StringBuilder();
         String line;
         while ((line = br.readLine()) != null) {
-            output += line;
+            builder.append(line);
         }
         
-        return output;    } 
+        return builder.toString();    
+    } 
+    
+    public String read (String stop) throws IOException {
+        URLConnection con = link.openConnection();
+        InputStream is = con.getInputStream();
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        
+        StringBuilder builder = new StringBuilder();
+        String line;
+        while (((line = br.readLine()) != null) && !(line.contains(stop))) { //
+            builder.append(line);
+        }
+        
+        return builder.toString();    
+    } 
     
 }

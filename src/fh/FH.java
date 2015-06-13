@@ -6,7 +6,8 @@
 
 package fh;
 
-import Data.League;
+import Data.Database;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -18,14 +19,18 @@ public class FH {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException, InterruptedException, FileNotFoundException, ClassNotFoundException {
         
 //        Site neulion = new Site("https://ca.sports.yahoo.com/nhl/teams/ott/roster/");
 //        neulion.connect();
 //        System.out.println(neulion.read());
 
-        League nhl = new League ();
-        nhl.listen();
+        Database rfhl = new Database ();
+        rfhl.populate();
+        rfhl.serialize();
+        
+        rfhl.deserialize();
+        rfhl.listen();
         
     }
     

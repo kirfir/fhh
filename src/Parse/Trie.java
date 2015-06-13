@@ -10,12 +10,13 @@ package Parse;
  *
  * @author trevor.witjes
  */
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Trie {
+public class Trie implements Serializable{
    private TrieNode root;
    
    /**
