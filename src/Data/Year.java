@@ -29,10 +29,10 @@ public class Year implements Serializable{
         name = year;
     }
     
-    public void initiate(Trie lookup) throws IOException{
+    public void initiate(Trie lookup) throws IOException {
         // nhlnumbers.com for inital player list and basic stats
         String input = getSource("http://stats.nhlnumbers.com/player_stats/position/skater/year/" + String.valueOf(name), "MM");
-        input = input.substring(input.indexOf("/thead")).replaceAll("\\s+","");
+        input = input.substring(input.indexOf("/thead")).replaceAll("\\s+"," ");
         temp = input.split("Jersey");
 
         for (int i=1; i<temp.length; i++){
@@ -47,10 +47,17 @@ public class Year implements Serializable{
         }
     }
     
-    public void detail(Trie lookup){
+    public void detail(Trie lookup) throws IOException {
+        String input = getSource("http://www.sportingcharts.com/nhl/stats/time-on-ice-statistics/" + String.valueOf(name - 1) + "/", ">-<");
+        input = input.substring(input.indexOf("</thead>"));
+        temp = input.split("text-align: left");
         
-        
-        //players.get(name.toLowerCase());
+        for (int i=1; i<temp.length; i++){
+            String pname = fixname(temp[i].substring(temp[i].indexOf("/\'>")+3, temp[i].indexOf("</a>")));
+            Player p = players.get(pname.toLowerCase());
+            if (p != null) { p.sportingcharts(temp[i]); }
+            else           { System.out.println(pname); }
+        }
     }
     
     public List <Player> search (Trie lookup, String srch){
@@ -67,17 +74,34 @@ public class Year implements Serializable{
         return result;
     }
     
-    public void fh_teams(){
+    public String fixname (String name){
+        switch (name){
+            case "Michael Cammalleri":
+                name = "Mike Cammalleri";
+                break;
+            case "Pierre-Alexandr Parenteau":
+                name = "Pierre-Alexandre Parenteau";
+                break;
+             
+             
+        }
         
+        return name;
     }
     
-    
+    public void fh_teams(){
+        
+    }  
     
     public String getSource(String url, String stop) throws IOException{
         Site site = new Site(url);
         site.connect();
         return site.read(stop);
     }
+    
+    
+    
+    
     
     
     

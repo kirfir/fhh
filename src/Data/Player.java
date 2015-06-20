@@ -50,10 +50,11 @@ public class Player implements Serializable{
         temp = input.split("<td>");
         
         String pdata[] = temp[0].split(":");        
-        name = pdata[4].substring(pdata[4].indexOf(">")+1, pdata[4].indexOf("</")).split(",")[1] 
+        name = pdata[4].substring(pdata[4].indexOf(">")+1, pdata[4].indexOf("</")).split(", ")[1] 
              + " " 
-             + pdata[4].substring(pdata[4].indexOf(">")+1, pdata[4].indexOf("</")).split(",")[0];
-       
+             + pdata[4].substring(pdata[4].indexOf(">")+1, pdata[4].indexOf("</")).split(", ")[0];
+        fixname();
+        
         jersey = NumberUtils.toInt(pdata[1].substring(0, pdata[1].indexOf("&")));
         
         position = pdata[3].substring(0, 1);
@@ -85,16 +86,42 @@ public class Player implements Serializable{
     public void sportingcharts (String input){
         float div = toi*gp;
         
-        goals60 = round(goals/div, 3);
-        assists60 = round(assists/div, 3);
-        points60 = round(points/div, 3);
-        stp60 = round(stp/div, 3);
-        esp60 = round(esp/div, 3);
-        sog60 = round(sog/div, 3);
-        hits60 = round(hits/div, 3);
-        blocks60 = round(blocks/div, 3);
+//        goals60 = round(goals/div, 3);
+//        assists60 = round(assists/div, 3);
+//        points60 = round(points/div, 3);
+//        stp60 = round(stp/div, 3);
+//        esp60 = round(esp/div, 3);
+//        sog60 = round(sog/div, 3);
+//        hits60 = round(hits/div, 3);
+//        blocks60 = round(blocks/div, 3);
     }
      
+    public void fixname (){ // Silfverberg, Flynn, 
+        switch (name) {
+            case "Daniel Girardi":
+                name = "Dan Girardi";
+                break;
+            case "Tobias Enstrom":
+                name = "Toby Enstrom";
+                break;
+            case "Nikolai Kulemin":
+                name = "Nikolay Kulemin";
+                break;
+            case "Maxime Talbot":
+                name = "Max Talbot";
+                break;
+            case "Mathew Dumba":
+                name = "Matt Dumba";
+                break;
+            case "Dan Paille":
+                name = "Daniel Paille";
+                break;
+            case "Alexander Khokhlachev":
+                name = "Alex Khokhlachev";
+                break;
+        }
+    }
+    
     // -----------------------
     
      

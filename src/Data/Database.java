@@ -7,9 +7,6 @@
 package Data;
 
 import Parse.Trie;
-import Web.Site;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -17,8 +14,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,7 +57,7 @@ public class Database {
     public final void populate () throws IOException, InterruptedException {   
         System.out.println("Populating database...");
         
-        for (int yr=2010; yr<=2015; yr++){
+        for (int yr=2015; yr<=2015; yr++){
             Year y = new Year(yr);
             y.initiate(lookup);
             y.detail(lookup);
