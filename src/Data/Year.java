@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -52,12 +53,30 @@ public class Year implements Serializable{
         input = input.substring(input.indexOf("</thead>"));
         temp = input.split("text-align: left");
         
-        for (int i=1; i<temp.length; i++){
+        for (int i=1; i<temp.length; i++){ //temp.length
             String pname = fixname(temp[i].substring(temp[i].indexOf("/\'>")+3, temp[i].indexOf("</a>")));
             Player p = players.get(pname.toLowerCase());
             if (p != null) { p.sportingcharts(temp[i]); }
-            else           { System.out.println(pname); }
+            // else           { System.out.println(pname); }
         }
+        
+        input = getSource("http://www.behindthenet.ca/nhl_statistics.php?ds=34&s=3&f1=" + String.valueOf(name - 1) + "_s&f2=5v5&c=0+1+3+5+29+30+31+32+33+34#snip=f");
+        input = input.substring(input.indexOf(">PDO<"));
+        temp = input.split("<tr id=");
+        
+        for (int i=1; i<temp.length; i++){
+            String pname = temp[i].substring(temp[i].indexOf("col-2"));
+            pname = pname.substring(pname.indexOf("\">")+2, pname.indexOf("<")).toLowerCase();            
+            
+            Iterator it = players.entrySet().iterator();
+            while(it.hasNext()){
+                Map.Entry <String, Player> pair = (Map.Entry)it.next();
+                Player p = pair.getValue();
+                if (p != null && p.BTN_index.contains(pname)){
+                    p.behindthenet(temp[i]);
+                }
+            }
+        }    
     }
     
     public List <Player> search (Trie lookup, String srch){
@@ -97,6 +116,12 @@ public class Year implements Serializable{
         Site site = new Site(url);
         site.connect();
         return site.read(stop);
+    }
+    
+    public String getSource(String url) throws IOException{
+        Site site = new Site(url);
+        site.connect();
+        return site.read();
     }
     
     

@@ -9,11 +9,7 @@ package Data;
 import static Utils.StringCmds.round;
 import static Utils.StringCmds.timeToString;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 
 /**
@@ -31,6 +27,9 @@ public class Player implements Serializable{
         fow, fol, esp, stp, ppg, ppa, shg, sha, gwg;
     float sht_pcnt, toi, mins;
     float goals60, assists60, points60, sog60, hits60, blocks60, esp60, stp60;
+    
+    float onice_sht_pcnt;
+    String BTN_index; // behindthenet index
     
     //List<Split> splits = new ArrayList<>();
     String temp[];
@@ -54,48 +53,69 @@ public class Player implements Serializable{
              + " " 
              + pdata[4].substring(pdata[4].indexOf(">")+1, pdata[4].indexOf("</")).split(", ")[0];
         fixname();
+        BTN_index = name.toLowerCase().replaceAll("[^A-Za-z]", "");
+                
+        jersey = NumberUtils.toInt(pdata[1].substring(1, pdata[1].indexOf("&")));
         
-        jersey = NumberUtils.toInt(pdata[1].substring(0, pdata[1].indexOf("&")));
-        
-        position = pdata[3].substring(0, 1);
-        age = NumberUtils.toInt(pdata[4].substring(0, pdata[4].indexOf("&")));
+        position = pdata[3].substring(1, 2);
+        age = NumberUtils.toInt(pdata[4].substring(1, pdata[4].indexOf("&")));
         
         if (!temp[1].contains("unknown")) {
             team = temp[1].substring(temp[1].indexOf(">")+1, temp[1].indexOf("</"));
         }            
         
-        gp = NumberUtils.toInt(temp[2].substring(0, temp[2].indexOf("<")));
-        goals = NumberUtils.toInt(temp[3].substring(0, temp[3].indexOf("<")));
-        assists = NumberUtils.toInt(temp[4].substring(0, temp[4].indexOf("<")));
-        points = NumberUtils.toInt(temp[5].substring(0, temp[5].indexOf("<")));
-        plusminus = NumberUtils.toInt(temp[6].substring(0, temp[6].indexOf("<")));
-        pim = NumberUtils.toInt(temp[7].substring(0, temp[7].indexOf("<")));
-        hits = NumberUtils.toInt(temp[8].substring(0, temp[8].indexOf("<")));
-        blocks = NumberUtils.toInt(temp[9].substring(0, temp[9].indexOf("<")));
-        ppg = NumberUtils.toInt(temp[10].substring(0, temp[10].indexOf("<")));
-        ppa = NumberUtils.toInt(temp[11].substring(0, temp[11].indexOf("<")));
-        shg = NumberUtils.toInt(temp[12].substring(0, temp[12].indexOf("<")));
-        sha = NumberUtils.toInt(temp[13].substring(0, temp[13].indexOf("<")));
+        gp = NumberUtils.toInt(temp[2].substring(1, temp[2].indexOf("<")-1));
+        goals = NumberUtils.toInt(temp[3].substring(1, temp[3].indexOf("<")-1));
+        assists = NumberUtils.toInt(temp[4].substring(1, temp[4].indexOf("<")-1));
+        points = NumberUtils.toInt(temp[5].substring(1, temp[5].indexOf("<")-1));
+        plusminus = NumberUtils.toInt(temp[6].substring(1, temp[6].indexOf("<")-1));
+        pim = NumberUtils.toInt(temp[7].substring(1, temp[7].indexOf("<")-1));
+        hits = NumberUtils.toInt(temp[8].substring(1, temp[8].indexOf("<")-1));
+        blocks = NumberUtils.toInt(temp[9].substring(1, temp[9].indexOf("<")-1));
+        ppg = NumberUtils.toInt(temp[10].substring(1, temp[10].indexOf("<")-1));
+        ppa = NumberUtils.toInt(temp[11].substring(1, temp[11].indexOf("<")-1));
+        shg = NumberUtils.toInt(temp[12].substring(1, temp[12].indexOf("<")-1));
+        sha = NumberUtils.toInt(temp[13].substring(1, temp[13].indexOf("<")-1));
         stp = ppg + ppa + shg + sha;
         esp = points - stp;
-        gwg = NumberUtils.toInt(temp[14].substring(0, temp[14].indexOf("<")));
-        sog = NumberUtils.toInt(temp[15].substring(0, temp[15].indexOf("<")));
-        sht_pcnt = round(Float.parseFloat(temp[16].substring(0, temp[16].indexOf("<")))*100, 2);
+        gwg = NumberUtils.toInt(temp[14].substring(1, temp[14].indexOf("<")-1));
+        sog = NumberUtils.toInt(temp[15].substring(1, temp[15].indexOf("<")-1));
+        sht_pcnt = round(Float.parseFloat(temp[16].substring(1, temp[16].indexOf("<")-1))*100, 2);
     }
     
     public void sportingcharts (String input){
-        float div = toi*gp;
+        temp = input.split("\">");
         
-//        goals60 = round(goals/div, 3);
-//        assists60 = round(assists/div, 3);
-//        points60 = round(points/div, 3);
-//        stp60 = round(stp/div, 3);
-//        esp60 = round(esp/div, 3);
-//        sog60 = round(sog/div, 3);
-//        hits60 = round(hits/div, 3);
-//        blocks60 = round(blocks/div, 3);
+        //div = Float.parseFloat(temp[5].substring(0, temp[5].indexOf("<")).replace(",", ""));
+        toi = Float.parseFloat(temp[6].substring(0, temp[6].indexOf("<")));
+ 
+        float div = toi*gp/60;
+        
+        goals60 = round(goals/div, 3);
+        assists60 = round(assists/div, 3);
+        points60 = round(points/div, 3);
+        stp60 = round(stp/div, 3);
+        esp60 = round(esp/div, 3);
+        sog60 = round(sog/div, 3);
+        hits60 = round(hits/div, 3);
+        blocks60 = round(blocks/div, 3);
     }
      
+    public void behindthenet (String input){
+        temp = input.split("\">");
+        //System.out.println(name + " -- " + temp[9].substring(0, temp[9].indexOf("<")-1));
+        
+        if (temp[9].substring(0, temp[9].indexOf("<")-1).contains("-") || temp[9].substring(0, temp[9].indexOf("<")-1).isEmpty()){
+            onice_sht_pcnt = 0;
+        } else {
+            onice_sht_pcnt = Float.parseFloat(temp[9].substring(0, temp[9].indexOf("<")-1));
+        }
+        
+        if (Integer.parseInt(year) == 2015 && age < 28 && gp > 20 && points60 > 2.0 && onice_sht_pcnt < 7.5){
+            printPlayer();
+        }
+    }
+    
     public void fixname (){ // Silfverberg, Flynn, 
         switch (name) {
             case "Daniel Girardi":
@@ -134,7 +154,7 @@ public class Player implements Serializable{
             + " #" + jersey 
             + " | " + team 
             + " | Age: " + age 
-            + " | Exp: " + exp 
+            //+ " | Exp: " + exp 
             + " | GP: " + gp
             + " | G: " + goals 
             + " | A: " + assists 
@@ -144,6 +164,7 @@ public class Player implements Serializable{
             //+ " | PIM: " + pim 
             + " | SOG: " + sog 
             + " | S%: " + sht_pcnt  
+            + " | OI S%: " + onice_sht_pcnt
             + " | Hits: " + hits 
             + " | Blocks: " + blocks     
             + " | TOI: " + timeToString(toi) 
@@ -165,7 +186,7 @@ public class Player implements Serializable{
             + " #" + "0" 
             + " | " + "0" 
             + " | Age: " + "0" 
-            + " | Exp: " + "0" 
+            //+ " | Exp: " + "0" 
             + " | GP: " + "0" 
             + " | G: " + "0"  
             + " | A: " + "0"  
