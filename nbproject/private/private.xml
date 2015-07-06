@@ -3,16 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/trevor.witjes/Documents/NetBeansProjects/FH/src/fh/FH.java</file>
-            <file>file:/C:/Users/trevor.witjes/Documents/NetBeansProjects/FH/src/Web/Site.java</file>
-            <file>file:/C:/Users/trevor.witjes/Documents/NetBeansProjects/FH/src/Data/Database.java</file>
-            <file>file:/C:/Users/trevor.witjes/Documents/NetBeansProjects/FH/src/Data/Year.java</file>
-            <file>file:/C:/Users/trevor.witjes/Documents/NetBeansProjects/FH/src/Data/Team.java</file>
-            <file>file:/C:/Users/trevor.witjes/Documents/NetBeansProjects/FH/src/Data/Player.java</file>
-            <file>file:/C:/Users/trevor.witjes/Documents/NetBeansProjects/FH/src/Data/Split.java</file>
-            <file>file:/C:/Users/trevor.witjes/Documents/NetBeansProjects/FH/src/Parse/Trie.java</file>
-            <file>file:/C:/Users/trevor.witjes/Documents/NetBeansProjects/FH/src/Parse/TrieNode.java</file>
-            <file>file:/C:/Users/trevor.witjes/Documents/NetBeansProjects/FH/src/Test/Test1.java</file>
+            <file>file:/C:/Users/Trevor/Documents/GitHub/fhh/src/Data/Player.java</file>
+            <file>file:/C:/Users/Trevor/Documents/GitHub/fhh/src/Data/Database.java</file>
+            <file>file:/C:/Users/Trevor/Documents/GitHub/fhh/src/Data/Split.java</file>
+            <file>file:/C:/Users/Trevor/Documents/GitHub/fhh/src/fh/FH.java</file>
+            <file>file:/C:/Users/Trevor/Documents/GitHub/fhh/src/Utils/StringCmds.java</file>
+            <file>file:/C:/Users/Trevor/Documents/GitHub/fhh/src/Data/Year.java</file>
+            <file>file:/C:/Users/Trevor/Documents/GitHub/fhh/src/Data/Team.java</file>
         </group>
     </open-files>
 </project-private>

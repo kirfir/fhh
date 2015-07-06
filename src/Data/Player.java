@@ -27,8 +27,8 @@ public class Player implements Serializable{
         fow, fol, esp, stp, ppg, ppa, shg, sha, gwg;
     float sht_pcnt, toi, mins;
     float goals60, assists60, points60, sog60, hits60, blocks60, esp60, stp60;
-    
     float onice_sht_pcnt;
+    
     String BTN_index; // behindthenet index
     
     //List<Split> splits = new ArrayList<>();
@@ -111,9 +111,9 @@ public class Player implements Serializable{
             onice_sht_pcnt = Float.parseFloat(temp[9].substring(0, temp[9].indexOf("<")-1));
         }
         
-        if (Integer.parseInt(year) == 2015 && age < 28 && gp > 20 && points60 > 2.0 && onice_sht_pcnt < 7.5){
-            printPlayer();
-        }
+//        if (Integer.parseInt(year) == 2015 && age < 28 && gp > 20 && points60 > 2.0 && onice_sht_pcnt < 7.5){
+//            printPlayer();
+//        }
     }
     
     public void fixname (){ // Silfverberg, Flynn, 

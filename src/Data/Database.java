@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -66,23 +66,7 @@ public class Database {
             System.out.println("Added year " + yr);
         }
 
-        
-//        String alt;
-//        for (String team : teams) {
-//            switch (team) {
-//                case "CBJ": alt = "cob"; break;
-//                case "LAK": alt = "los"; break;
-//                case "MTL": alt = "mon"; break;
-//                case "SJS": alt = "san"; break;
-//                case "TBL": alt = "tam"; break;
-//                case "WSH": alt = "was"; break;
-//                default: alt = team; break;
-//            }
-//            
-//            addYahooData(alt.toLowerCase(), team);
-//        }
-//        
-//        addTeams();
+        addTeams();
 //        dumpExcel();
 //        System.out.println("Excel dump done");
     }
@@ -139,13 +123,16 @@ public class Database {
         String data = firefoxDriver.getPageSource();
         
         data = data.substring(data.indexOf("<table class=\"fantTable rosterChart\">"));
+        data = data.substring(0, data.indexOf("</tbody>"));
         String [] temp = data.split("<td class=\"team leftCol\">");
         //System.out.println(temp[1]);
         
         for (int i=1; i<temp.length; i++){
             Team t = new Team();
-            t.fillTeam(players, lookup, temp[i]);
+            t.fillTeam(years, lookup, temp[i]);
             fh_teams.add(t);
+            t.getTotals();
+            t.printAverages();
         }
         
         firefoxDriver.quit();
